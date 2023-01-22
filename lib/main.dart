@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sempre_va/model/user.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
+      var user = User.fromJson(jsonDecode(response.body)['content'].first);
       return response;
     } else {
       // If the server did not return a 200 OK response,
