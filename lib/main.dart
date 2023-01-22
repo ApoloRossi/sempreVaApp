@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<http.Response> fetchUser() async {
+    final response = await http
+        .get(Uri.parse('http://192.168.15.5:60143/users'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return response;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
-                      // Process data.
+                      fetchUser();
                     }
                   },
                   child: const Text('Acessar'),
